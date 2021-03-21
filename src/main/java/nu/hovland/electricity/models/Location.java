@@ -19,7 +19,10 @@ public class Location {
     private String houseSection;
     private String postCode;
 
-    @OneToMany(mappedBy = "Location")
+    @OneToMany(mappedBy = "location") // TODO NB: This created an entityManager bean error when having capital 'L'
     Set<Meeter> meeters;
 
+    public String toString() {
+        return String.format("%s %s (%s)", street, houseNumber, postCode);
+    }
 }

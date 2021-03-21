@@ -13,10 +13,14 @@ public class Meeter {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id = null;
+    private String description;
 
-    @ManyToOne
+    @ManyToOne(targetEntity = Location.class)
     @JoinColumn(name="locationId", nullable = false)
     private Location location;
 
+    public String toString() {
+        return String.format("Meeter[id=%d, %s, Located at: %s]", id, description, location.toString());
+    }
 
 }
