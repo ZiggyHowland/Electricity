@@ -4,8 +4,10 @@ import nu.hovland.electricity.models.Meeter;
 import nu.hovland.electricity.services.LocationService;
 import nu.hovland.electricity.services.MeeterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -22,15 +24,15 @@ public class TestController {
 
     @GetMapping(value="/", produces={"application/json", "application/xml"})
     public ResponseEntity<Collection<Meeter>> getMeetersByLocationId(
-            @RequestParam(value="location", required = false) Long location
+            @RequestParam(value="locationId", required = false) Long locationId
     ){
         Collection<Meeter> meeters = new ArrayList<>();
 
-        if (location == null) {
+        if (locationId == null) {
             meeters = service.findAll();
         }
         else {
-            meeters = service.findByLocation(location);
+            meeters = service.findByLocation(locationId);
         }
 
         if (meeters == null) {
@@ -40,6 +42,7 @@ public class TestController {
             return ResponseEntity.ok().body(meeters);
         }
     }
+
 
     @GetMapping(value="/{id}", produces={"application/json", "application/xml"})
     public ResponseEntity<Meeter> getMeeterById(@PathVariable Long id) {
@@ -57,23 +60,45 @@ public class TestController {
             value="/location/{locationId}",
             consumes={"application/json", "application/xml"},
             produces={"application/json", "application/xml"})
-    public ResponseEntity<Meeter> insertProduct(@RequestBody Meeter meeter, @PathVariable Long locationId) {
+    public ResponseEntity<Meeter> insertMeeter(@RequestBody Meeter meeter, @PathVariable Long locationId) {
         try {
             meeter.setLocation(locationService.findLocationById(locationId));
             Meeter m = service.addNewMeeter(meeter);
-            URI uri = URI.create("test/meeters/" + m.getId());
+            URI uri = URI.create("/meeters/location/" + m.getId());
             return ResponseEntity.created(uri).body(m);
         }
-        catch (RuntimeException re) {
-            return ResponseEntity.unprocessableEntity().build(); // TODO: Validate if this is the way to handle it
+        catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error message", e);
+            //return ResponseEntity.unprocessableEntity().build(); // TODO: Validate if this is the way to handle it
         }
     }
 
 
-    //@PutMapping // TODO: Continue here!
+
+    @PutMapping(value="/{id}", consumes={"application/json", "application/xml"})
+    public ResponseEntity<Void> updateMeeter(@PathVariable Long id, @RequestBody Meeter meeter) {
+        try {
+            Meeter m = service.findById(id);
+            meeter.setLocation(m.getLocation());
+            service.updateMeeter(meeter);
+            return ResponseEntity.ok().build();
+        }
+        catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error message", e);
+        }
+    }
 
 
-    //@DeleteMapping
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteMeeter(@PathVariable Long id) {
+        try {
+            service.deleteMeeter(id);
+            return ResponseEntity.ok().build();
+        }
+        catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error message", e);
+        }
+    }
 
 
 

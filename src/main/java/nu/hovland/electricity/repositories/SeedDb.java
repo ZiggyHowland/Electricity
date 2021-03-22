@@ -18,6 +18,7 @@ public class SeedDb {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
         jdbcTemplate.update("DELETE FROM Meeter;" );
+        jdbcTemplate.update("ALTER TABLE Meeter AUTO_INCREMENT = 1");
         jdbcTemplate.update("DELETE FROM Location;");
 
         jdbcTemplate.update("INSERT INTO Location (id, street, houseNumber, houseSection, postCode) VALUES (?,?,?,?,?)",

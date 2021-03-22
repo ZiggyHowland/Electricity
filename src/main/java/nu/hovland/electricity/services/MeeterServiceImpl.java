@@ -22,6 +22,16 @@ public class MeeterServiceImpl implements MeeterService  {
     }
 
     @Override
+    public void updateMeeter(Meeter m) {
+        meeterRepository.save(m);
+    }
+
+    @Override
+    public void deleteMeeter(Long id) {
+        meeterRepository.deleteById(id);
+    }
+
+    @Override
     public Collection<Meeter> findByLocation(Long locationId) {
         return (Collection<Meeter>)meeterRepository.findAllByLocationId(locationId);
     }

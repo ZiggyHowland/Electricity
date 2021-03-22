@@ -1,6 +1,6 @@
 package nu.hovland.electricity.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +20,7 @@ public class Meeter {
     @ManyToOne(targetEntity = Location.class)
     @JoinColumn(name="locationId", nullable = false)
     private Location location;
+    // TODO: Find out how to add locationId as response value
 
 
     public String toString() {
