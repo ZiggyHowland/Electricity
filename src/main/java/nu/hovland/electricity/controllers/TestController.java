@@ -1,8 +1,8 @@
 package nu.hovland.electricity.controllers;
 
-import nu.hovland.electricity.models.Meeter;
+import nu.hovland.electricity.models.Meter;
 import nu.hovland.electricity.services.LocationService;
-import nu.hovland.electricity.services.MeeterService;
+import nu.hovland.electricity.services.MeterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,44 +14,44 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/meeters")
+@RequestMapping("/meters")
 public class TestController {
     @Autowired
-    private MeeterService service;
+    private MeterService service;
 
     @Autowired
     private LocationService locationService;
 
     @GetMapping(value="/", produces={"application/json", "application/xml"})
-    public ResponseEntity<Collection<Meeter>> getMeetersByLocationId(
+    public ResponseEntity<Collection<Meter>> getMetersByLocationId(
             @RequestParam(value="locationId", required = false) Long locationId
     ){
-        Collection<Meeter> meeters = new ArrayList<>();
+        Collection<Meter> meters = new ArrayList<>();
 
         if (locationId == null) {
-            meeters = service.findAll();
+            meters = service.findAll();
         }
         else {
-            meeters = service.findByLocation(locationId);
+            meters = service.findByLocation(locationId);
         }
 
-        if (meeters == null) {
+        if (meters == null) {
             return ResponseEntity.notFound().build();
         }
         else {
-            return ResponseEntity.ok().body(meeters);
+            return ResponseEntity.ok().body(meters);
         }
     }
 
 
     @GetMapping(value="/{id}", produces={"application/json", "application/xml"})
-    public ResponseEntity<Meeter> getMeeterById(@PathVariable Long id) {
-        Meeter meeter = service.findById(id);
-        if (meeter == null) {
+    public ResponseEntity<Meter> getMeterById(@PathVariable Long id) {
+        Meter meter = service.findById(id);
+        if (meter == null) {
             return ResponseEntity.notFound().build();
         }
         else {
-            return ResponseEntity.ok().body(meeter);
+            return ResponseEntity.ok().body(meter);
         }
     }
 
@@ -60,11 +60,11 @@ public class TestController {
             value="/location/{locationId}",
             consumes={"application/json", "application/xml"},
             produces={"application/json", "application/xml"})
-    public ResponseEntity<Meeter> insertMeeter(@RequestBody Meeter meeter, @PathVariable Long locationId) {
+    public ResponseEntity<Meter> insertMeter(@RequestBody Meter meter, @PathVariable Long locationId) {
         try {
-            meeter.setLocation(locationService.findLocationById(locationId));
-            Meeter m = service.addNewMeeter(meeter);
-            URI uri = URI.create("/meeters/location/" + m.getId());
+            meter.setLocation(locationService.findLocationById(locationId));
+            Meter m = service.addNewMeter(meter);
+            URI uri = URI.create("/meters/location/" + m.getId());
             return ResponseEntity.created(uri).body(m);
         }
         catch (IllegalArgumentException e) {
@@ -76,11 +76,11 @@ public class TestController {
 
 
     @PutMapping(value="/{id}", consumes={"application/json", "application/xml"})
-    public ResponseEntity<Void> updateMeeter(@PathVariable Long id, @RequestBody Meeter meeter) {
+    public ResponseEntity<Void> updateMeter(@PathVariable Long id, @RequestBody Meter meter) {
         try {
-            Meeter m = service.findById(id);
-            meeter.setLocation(m.getLocation());
-            service.updateMeeter(meeter);
+            Meter m = service.findById(id);
+            meter.setLocation(m.getLocation());
+            service.updateMeter(meter);
             return ResponseEntity.ok().build();
         }
         catch (IllegalArgumentException e) {
@@ -90,9 +90,9 @@ public class TestController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMeeter(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteMeter(@PathVariable Long id) {
         try {
-            service.deleteMeeter(id);
+            service.deleteMeter(id);
             return ResponseEntity.ok().build();
         }
         catch (IllegalArgumentException e) {

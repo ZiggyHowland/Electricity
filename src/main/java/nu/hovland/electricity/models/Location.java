@@ -5,13 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.web.ProjectedPayload;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
 @Entity @Table(name="Location")
@@ -26,7 +23,7 @@ public class Location {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "location") // TODO NB: This created an entityManager bean error when having capital 'L'
-    List<Meeter> meeters;
+    List<Meter> meters;
 
 
     public Location(Long id, String street, String houseNumber, String houseSection, String postCode) {
@@ -35,11 +32,11 @@ public class Location {
         this.houseNumber = houseNumber;
         this.houseSection = houseSection;
         this.postCode = postCode;
-        meeters = new ArrayList<>();
+        meters = new ArrayList<>();
     }
 
-    public void addMeeter(Meeter meeter) {
-        meeters.add(meeter);
+    public void addMeter(Meter meter) {
+        meters.add(meter);
     }
 
     public String toString() {

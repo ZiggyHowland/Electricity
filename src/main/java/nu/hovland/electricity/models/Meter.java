@@ -9,8 +9,8 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @AllArgsConstructor @NoArgsConstructor @Setter @Getter
-@Entity @Table(name="Meeter")
-public class Meeter {
+@Entity @Table(name="Meter")
+public class Meter {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id = null;
@@ -24,7 +24,7 @@ public class Meeter {
 
 
     public String toString() {
-        return String.format("Meeter[id=%d, %s, Located at: %s]", id, description, location.toString());
+        return String.format("Meter[id=%d, %s, Located at: %s]", id, description, location.toString());
     }
 
 

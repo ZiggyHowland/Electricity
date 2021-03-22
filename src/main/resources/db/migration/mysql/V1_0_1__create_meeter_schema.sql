@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `Meeter` (
+CREATE TABLE IF NOT EXISTS `Meter` (
     `id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `description` varchar(50),
     `locationId` bigint NOT NULL,
