@@ -17,13 +17,25 @@ public class MeeterServiceImpl implements MeeterService  {
     }
 
     @Override
-    public void addNew(Meeter m) {
-        meeterRepository.save(m);
+    public Meeter addNewMeeter(Meeter m) {
+        return meeterRepository.save(m);
     }
 
     @Override
     public Collection<Meeter> findByLocation(Long locationId) {
         return (Collection<Meeter>)meeterRepository.findAllByLocationId(locationId);
-        //return null;
     }
+
+    @Override
+    public Collection<Meeter> findAll() {
+        return (Collection<Meeter>)meeterRepository.findAll();
+    }
+
+    @Override
+    public Meeter findById(Long id) {
+        return meeterRepository.findById(id).orElse(null);
+    }
+
+
+
 }

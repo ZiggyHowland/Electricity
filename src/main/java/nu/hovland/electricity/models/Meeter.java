@@ -1,5 +1,6 @@
 package nu.hovland.electricity.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,12 +16,16 @@ public class Meeter {
     private Long id = null;
     private String description;
 
+    @JsonBackReference
     @ManyToOne(targetEntity = Location.class)
     @JoinColumn(name="locationId", nullable = false)
     private Location location;
 
+
     public String toString() {
         return String.format("Meeter[id=%d, %s, Located at: %s]", id, description, location.toString());
     }
+
+
 
 }
