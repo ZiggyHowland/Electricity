@@ -28,5 +28,14 @@ public class SeedDb {
                 new Object[]{ "Hovedmåler", 1L });
         jdbcTemplate.update("INSERT INTO Meter (description, locationId) VALUES (?,?)",
                 new Object[]{ "Leilighet", 1L });
+
+
+        jdbcTemplate.update("INSERT INTO Location (id, street, houseNumber, houseSection, postCode) VALUES (?,?,?,?,?)",
+                new Object[]{ 2L, "Norheimsvegen", "17", "b", "5243" });
+
+        jdbcTemplate.update("INSERT INTO Meter (description, locationId) VALUES (?,?)",
+                new Object[]{ "Hovedmåler", 2L });
+
+
     }
 }
