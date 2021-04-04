@@ -21,19 +21,19 @@ public class SeedDb {
         jdbcTemplate.update("ALTER TABLE Meter AUTO_INCREMENT = 1");
         jdbcTemplate.update("DELETE FROM Location;");
 
-        jdbcTemplate.update("INSERT INTO Location (id, street, houseNumber, houseSection, postCode) VALUES (?,?,?,?,?)",
+        jdbcTemplate.update("INSERT INTO Location (id, street, house_number, house_section, post_code) VALUES (?,?,?,?,?)",
                 new Object[]{ 1L, "Titlestadvegen", "219", null, "5243" });
 
-        jdbcTemplate.update("INSERT INTO Meter (description, locationId) VALUES (?,?)",
+        jdbcTemplate.update("INSERT INTO Meter (description, location_id) VALUES (?,?)",
                 new Object[]{ "Hovedmåler", 1L });
-        jdbcTemplate.update("INSERT INTO Meter (description, locationId) VALUES (?,?)",
+        jdbcTemplate.update("INSERT INTO Meter (description, location_id) VALUES (?,?)",
                 new Object[]{ "Leilighet", 1L });
 
 
-        jdbcTemplate.update("INSERT INTO Location (id, street, houseNumber, houseSection, postCode) VALUES (?,?,?,?,?)",
+        jdbcTemplate.update("INSERT INTO Location (id, street, house_number, house_section, post_code) VALUES (?,?,?,?,?)",
                 new Object[]{ 2L, "Norheimsvegen", "17", "b", "5243" });
 
-        jdbcTemplate.update("INSERT INTO Meter (description, locationId) VALUES (?,?)",
+        jdbcTemplate.update("INSERT INTO Meter (description, location_id) VALUES (?,?)",
                 new Object[]{ "Hovedmåler", 2L });
 
 
