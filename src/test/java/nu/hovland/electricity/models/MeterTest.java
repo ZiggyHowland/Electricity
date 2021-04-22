@@ -12,8 +12,8 @@ class MeterTest {
     @Test
     public void givenBidirectionRelation_whenSerializing_thenException() throws JsonProcessingException {
         Location location = new Location(1L, "Gate", "1", "D", "1234");
-        Meter meter = new Meter(1L, "Hovedmåler", location);
-        location.addMeter(meter);
+        Meter meter = new Meter(1L, "Hovedmåler", location,  1L);
+//        location.addMeter(meter);
 
         JsonMappingException thrown = assertThrows(
             JsonMappingException.class, () -> new ObjectMapper().writeValueAsString(meter),
@@ -26,8 +26,8 @@ class MeterTest {
     @Test
     public void givenBidirectionRelation_whenUsingJacksonReferenceAnnotationWithSerialization_thenCorrect() throws JsonProcessingException {
         final Location location = new Location(1L, "Gate", "1", "D", "1234");
-        final Meter meter = new Meter(1L, "Hovedmåler", location);
-        location.addMeter(meter);
+        final Meter meter = new Meter(1L, "Hovedmåler",   location, 1L);
+//        location.addMeter(meter);
 
         final String meeterJson = new ObjectMapper().writeValueAsString(meter);
         final String locationJson = new ObjectMapper().writeValueAsString(location);

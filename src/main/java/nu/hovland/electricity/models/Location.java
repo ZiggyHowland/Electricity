@@ -8,9 +8,12 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-@AllArgsConstructor @NoArgsConstructor @Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor @Getter @Setter
 @Entity @Table(name="Location")
 public class Location {
     @Id
@@ -21,9 +24,10 @@ public class Location {
     private String houseSection;
     private String postCode;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "location") // TODO NB: This created an entityManager bean error when having capital 'L'
-    List<Meter> meters;
+
+    //@JsonManagedReference
+    @OneToMany(mappedBy = "location") // Which variable we are using to represent the parent class in our child class
+    private Set<Meter> meters;
 
 
     public Location(Long id, String street, String houseNumber, String houseSection, String postCode) {
@@ -32,12 +36,12 @@ public class Location {
         this.houseNumber = houseNumber;
         this.houseSection = houseSection;
         this.postCode = postCode;
-        meters = new ArrayList<>();
+        meters = new HashSet<>();
     }
 
-    public void addMeter(Meter meter) {
-        meters.add(meter);
-    }
+//    public Meter addMeter(Meter meter) {
+//        meters.add(meter);
+//    }
 
     public String toString() {
         return String.format("%s %s (%s)", street, houseNumber, postCode);

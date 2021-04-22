@@ -1,70 +1,45 @@
 package nu.hovland.electricity.controllers;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import nu.hovland.electricity.models.Location;
 import nu.hovland.electricity.models.Meter;
 import nu.hovland.electricity.services.LocationService;
 import nu.hovland.electricity.services.MeterService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 
 @RestController
-@RequestMapping(value="/meters")
+@RequestMapping(value="/v1/meters")
 @CrossOrigin
-public class MeterController {
+@Api(tags = "Meters v1", value="TestMeters", description = "API related to meters")
+public class MeterControllerV1 {
     @Autowired
     private MeterService service;
 
     @Autowired
     private LocationService locationService;
 
+    @ApiOperation(value="Get all meters")
     @GetMapping(value="", produces={"application/json", "application/xml"})
-    public ResponseEntity<Collection<Meter>> getMetersByLocationId(
-            @RequestParam(value="locationId", required = false) Long locationId
-    ){
-        Collection<Meter> meters = new ArrayList<>();
+    public ResponseEntity<Collection<Meter>> getMeters(){
+        Collection<Meter> meters = service.findAll();
 
-        if (locationId == null) {
-            meters = service.findAll();
-        }
-        else {
-            meters = service.findByLocation(locationId);
-        }
-
-        if (meters == null) {
-            return ResponseEntity.notFound().build();
-        }
-        else {
+        if (meters != null) {
             return ResponseEntity.ok().body(meters);
         }
-    }
-
-
-    @PostMapping(value="/{locationId}")
-    public ResponseEntity<Meter> insertMeter(
-            @RequestBody Meter meter,
-            @PathVariable Long locationId) {
-        Location location = locationService.findById(locationId);
-        if (location != null) {
-            meter.setLocation(location);
-            Meter m = service.addNewMeter(meter);
-            URI uri = URI.create("/meters/" + m.getId());
-            return ResponseEntity.created(uri).body(m);
-        }
         else {
             return ResponseEntity.notFound().build();
         }
     }
 
 
+    @ApiOperation(value="Get one specific meter")
     @GetMapping(value="/{id}", produces={"application/json", "application/xml"})
     public ResponseEntity<Meter> getMeterById(@PathVariable Long id) {
         Meter meter = service.findById(id);
@@ -77,24 +52,25 @@ public class MeterController {
     }
 
 
-
-
-
-
-    @PutMapping(value="/{id}", consumes={"application/json", "application/xml"})
+    @ApiOperation(value="Update meter")
+    @PutMapping(
+            value="/{id}",
+            consumes={"application/json", "application/xml"},
+            produces={"application/json", "application/xml"})
     public ResponseEntity<Void> updateMeter(@PathVariable Long id, @RequestBody Meter meter) {
-        try {
-            Meter m = service.findById(id);
+        Meter m = service.findById(id);
+        if (m == null) {
+            return ResponseEntity.notFound().build();
+        }
+        else {
             meter.setLocation(m.getLocation());
             service.updateMeter(meter);
             return ResponseEntity.ok().build();
         }
-        catch (IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error message", e);
-        }
     }
 
 
+    @ApiOperation(value="Delete meter")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMeter(@PathVariable Long id) {
         try {
@@ -102,15 +78,9 @@ public class MeterController {
             return ResponseEntity.ok().build();
         }
         catch (IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error message", e);
+            return ResponseEntity.notFound().build();
         }
     }
-
-
-
-
-
-
 
 
 }

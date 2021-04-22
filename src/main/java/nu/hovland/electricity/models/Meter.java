@@ -16,11 +16,18 @@ public class Meter {
     private Long id = null;
     private String description;
 
-    @JsonBackReference
-    @ManyToOne(targetEntity = Location.class)
-    @JoinColumn(name="locationId", nullable = false)
+    @ManyToOne
+    @JoinColumn(name="location_id", nullable = false)
+    @JsonIgnore
     private Location location;
-    // TODO: Find out how to add locationId as response value
+    @Transient // Source: https://dzone.com/articles/introduction-to-spring-data-jpa-part-4-bidirection
+    private long locationId;
+    public long getLocationId() {
+        return location.getId();
+    }
+    public void setLocationId(long locationId) {
+        this.locationId = locationId;
+    }
 
 
     public String toString() {
