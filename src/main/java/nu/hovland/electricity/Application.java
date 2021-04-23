@@ -1,7 +1,6 @@
 package nu.hovland.electricity;
 
-import io.swagger.annotations.Api;
-import nu.hovland.electricity.components.MeterReadingsParser;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +19,7 @@ public class Application {
     public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(Application.class, args);
 
-        MeterReadingsParser.importFromCsvFile("db/MeterReadings.csv");
+        //MeterReadingsParser.importFromCsvFile("db/MeterReadings.csv");
 
     }
 
